@@ -1,0 +1,28 @@
+{
+  "name": "video-converter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon -e css,js,ejs,html index.js",
+    "tailwind:css": "npx tailwindcss -i public/css/tailwind.css -o public/css/tailwind.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "multer": "^1.4.2",
+    "webm-to-mp4": "^1.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.3.1",
+    "connect-livereload": "^0.6.1",
+    "livereload": "^0.9.3",
+    "nodemon": "^2.0.12",
+    "postcss": "^8.3.6",
+    "prettier": "^2.3.2",
+    "tailwindcss": "^2.2.7"
+  }
+}

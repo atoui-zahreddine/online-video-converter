@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Video converter</title>
+    <link rel="icon" href="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg">
+    <link rel="stylesheet" href="public/css/tailwind.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  </head>
+  <body>
+    <div>
+      <nav class="bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex items-center justify-between h-16">
+              <div class="flex-shrink-0">
+                <img
+                  class="h-8 w-8"
+                  src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
+                  alt="Workflow"
+                />
+              </div>
+              <h1 class=" text-3xl font-bold text-gray-100">Online Video Converter</h1>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <header class="bg-white shadow">
+      <div class="max-w-7xl mx-auto p-4 sm:px-6 lg:px-8">
+        <ul id="tabs" class="inline-flex w-full px-1 pt-2 space-x-4">
+          <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 border-b-2 border-blue-400 rounded-t opacity-50"><a href="#" class="h-full">Webm To Mp4</a></li>
+          <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 rounded-t opacity-50 border-opacity-0 border-b-2 hover:border-opacity-100 hover:border-blue-400"><a href="#" class="h-full">Mp4 To Webm</a></li>
+          <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 rounded-t opacity-50 border-opacity-0 border-b-2 hover:border-opacity-100 hover:border-blue-400"><a href="#" class="h-full">Avi to Mp4</a></li>
+          <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 rounded-t opacity-50 border-opacity-0 border-b-2 hover:border-opacity-100 hover:border-blue-400"><a href="#" class="h-full">Mp4 to Avi</a></li>
+        </ul>
+      </div>
+    </header>
+    <main>
+      <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <form
+          id="form"
+          enctype="multipart/form-data"
+          class="flex-col space-y-4 flex items-center"
+        >
+          <div
+            id="drop-area"
+            class="
+              border-4 border-dashed
+              flex
+              items-center
+              justify-center
+              border-gray-200
+              rounded-lg
+              h-56
+              w-96
+            "
+          >
+            <div
+              id="file-upload-success"
+              class="flex flex-col items-center justify-center space-y-4 hidden"
+            >
+              <img
+                src="/public/icons/uploadSuccess.svg"
+                alt="file upload"
+                height="40%"
+                width="40%"
+              />
+              <p class="text-gray-500 text-sm"></p>
+            </div>
+
+            <div id="spinner" class="flex hidden justify-center items-center">
+              <div
+                class="
+                  animate-spin
+                  rounded-full
+                  h-12
+                  w-12
+                  border-b-2 border-gray-900
+                "
+              ></div>
+            </div>
+            <video
+              class="w-full h-full hidden"
+              controls
+              id="video-tag"
+              width="100%"
+              height="100%"
+            >
+              <source id="video-source" src="#" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <div id="spinner" class="flex hidden justify-center items-center">
+            <div
+              class="
+                animate-spin
+                rounded-full
+                h-12
+                w-12
+                border-b-2 border-gray-900
+              "
+            ></div>
+          </div>
+          <div class="space-y-4 text-center">
+            <div class="flex text-sm items-center justify-center text-gray-600">
+              <label
+                for="file-upload"
+                class="
+                  relative
+                  cursor-pointer
+                  rounded-md
+                  font-medium
+                  text-indigo-600
+                  hover:text-indigo-500
+                  focus-within:outline-none
+                  focus-within:ring-2
+                  focus-within:ring-offset-2
+                  focus-within:ring-indigo-500
+                  bg-transparent
+                "
+              >
+                <span class="">Upload a video</span>
+                <input
+                  id="file-upload"
+                  name="file-upload"
+                  type="file"
+                  class="sr-only"
+                  accept="video/webm"
+                />
+              </label>
+              <p class="pl-1">or drag and drop</p>
+            </div>
+            <p class="text-xs text-gray-500">only webm videos up to 500MB</p>
+            <div id="file-status" class="my-2 text-xs text-gray-500"></div>
+            <div
+              id="status-bar-container"
+              class="shadow rounded-2xl hidden bg-grey-light"
+            >
+              <div
+                id="status-bar"
+                class="
+                  bg-indigo-600
+                  text-xs
+                  leading-none
+                  rounded-2xl
+                  py-1
+                  text-center text-white
+                "
+                style="width: 0%"
+              >
+                0%
+              </div>
+            </div>
+          </div>
+          <button
+
+            type="submit"
+            class="
+              my-4
+              mx-auto
+              inline-flex
+              justify-center
+              py-2
+              px-4
+              border border-transparent
+              shadow-sm
+              text-sm
+              font-medium
+              rounded-md
+              text-white
+              bg-indigo-600
+              hover:bg-indigo-700
+              outline-none
+
+            "
+            id="submit-btn"
+          >
+            Upload
+          </button>
+        </form>
+      </div>
+    </main>
+    <script src="public/js/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  </body>
+</html>
