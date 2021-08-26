@@ -6,7 +6,7 @@ const statusbar = document.getElementById("status-bar");
 const fileUploadSuccess = document.getElementById("file-upload-success");
 const fileStatus = document.getElementById("file-status");
 const submitBtn = document.getElementById("submit-btn");
-const baseUrl = "http://localhost:4000/api";
+const baseUrl = "https://online-video-converter-1.herokuapp.com/api";
 let file = null;
 
 async function handleSubmit(event) {
