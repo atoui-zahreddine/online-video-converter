@@ -1,4 +1,4 @@
-import { baseUrl } from "./config.js";
+const baseUrl = window.baseUrl;
 
 const dropArea = document.getElementById("drop-area");
 const fileUpload = document.getElementById("file-upload");
