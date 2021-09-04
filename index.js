@@ -11,7 +11,7 @@ app.set("view engine", "ejs");
 
 app.use(express.json());
 app.use("/public", express.static(path.join(__dirname, "public")));
-
 require("./startup/index")(app);
+app.use(require("./middlewares/handleServerErrors"));
 
 app.listen(port, () => console.log(`server is running on port : ${port}`));

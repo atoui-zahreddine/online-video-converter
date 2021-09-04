@@ -6,13 +6,14 @@ const statusbar = document.getElementById("status-bar");
 const fileUploadSuccess = document.getElementById("file-upload-success");
 const fileStatus = document.getElementById("file-status");
 const submitBtn = document.getElementById("submit-btn");
-const baseUrl = "https://online-video-converter-1.herokuapp.com/api";
+const baseUrl = "http://localhost:4000/api";
 let file = null;
 
 async function handleSubmit(event) {
   event.preventDefault();
 
   try {
+    if (!file) throw new Error("you need to select a file ");
     const formData = new FormData();
     formData.append("video", file, file.name);
 
@@ -22,13 +23,15 @@ async function handleSubmit(event) {
     submitBtn.disabled = true;
 
     const res = await axios.post(baseUrl + "/convert", formData, {
+      responseType: "blob",
       onUploadProgress,
       onDownloadProgress,
     });
-
+    console.log(res.data);
     await promptFileDownloader(res);
   } catch (e) {
-    showNotif(e.message);
+    console.log(e);
+    showToast(e.message);
   } finally {
     resetUI();
   }
@@ -36,6 +39,7 @@ async function handleSubmit(event) {
 
 function resetUI() {
   file = null;
+  fileUpload.value = null;
   fileStatus.innerText = "";
   statusBarContainer.classList.add("hidden");
   fileUploadSuccess.classList.add("hidden");
@@ -46,14 +50,44 @@ function resetUI() {
 
 function promptFileDownloader(response) {
   return new Promise((resolve) => {
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", response.headers["x-filename"]);
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
-    resolve();
+    const blob = new Blob([response.data], {
+      type: "application/octet-stream",
+    });
+    const filename = response.headers["x-filename"];
+    if (typeof window.navigator.msSaveBlob !== "undefined") {
+      // IE workaround for "HTML7007: One or more blob URLs were
+      // revoked by closing the blob for which they were created.
+      // These URLs will no longer resolve as the data backing
+      // the URL has been freed."
+      window.navigator.msSaveBlob(blob, filename);
+    } else {
+      const blobURL =
+        window.URL && window.URL.createObjectURL
+          ? window.URL.createObjectURL(blob)
+          : window.webkitURL.createObjectURL(blob);
+      const tempLink = document.createElement("a");
+      tempLink.style.display = "none";
+      tempLink.href = blobURL;
+      tempLink.setAttribute("download", filename);
+
+      // Safari thinks _blank anchor are pop ups. We only want to set _blank
+      // target if the browser does not support the HTML5 download attribute.
+      // This allows you to download files in desktop safari if pop up blocking
+      // is enabled.
+      if (typeof tempLink.download === "undefined") {
+        tempLink.setAttribute("target", "_blank");
+      }
+
+      document.body.appendChild(tempLink);
+      tempLink.click();
+
+      // Fixes "webkit blob resource error 1"
+      setTimeout(function () {
+        document.body.removeChild(tempLink);
+        window.URL.revokeObjectURL(blobURL);
+      }, 200);
+      resolve();
+    }
   });
 }
 
@@ -64,6 +98,8 @@ const onUploadProgress = (progressEvent) => {
 
   if (fileStatus.textContent !== "Uploading the file...") {
     fileStatus.textContent = "Uploading the file...";
+  } else if (percentCompleted === 100) {
+    fileStatus.textContent = "Converting ...";
   }
   updateStatusBarUI(percentCompleted);
 };
@@ -102,7 +138,7 @@ function onDragLeave(event) {
   dropArea.classList.remove("bg-gray-200");
 }
 
-function showNotif(message) {
+function showToast(message) {
   Toastify({
     text: message,
     duration: 3000,
@@ -125,7 +161,7 @@ function onDrop(event) {
     file = selectedFile;
     updateUIOnFileSelection(file);
   } catch (ex) {
-    showNotif(ex.message);
+    showToast(ex.message);
   }
 }
 
@@ -141,3 +177,6 @@ dropArea.addEventListener("dragleave", onDragLeave);
 dropArea.addEventListener("drop", onDrop);
 dropArea.addEventListener("dragover", (ev) => ev.preventDefault());
 fileUpload.addEventListener("change", onFileChange);
+form.addEventListener("reset", (event) => {
+  resetUI();
+});

@@ -28,9 +28,7 @@
       <div class="max-w-7xl mx-auto p-4 sm:px-6 lg:px-8">
         <ul id="tabs" class="inline-flex w-full px-1 pt-2 space-x-4">
           <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 border-b-2 border-blue-400 rounded-t opacity-50"><a href="#" class="h-full">Webm To Mp4</a></li>
-          <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 rounded-t opacity-50 border-opacity-0 border-b-2 hover:border-opacity-100 hover:border-blue-400"><a href="#" class="h-full">Mp4 To Webm</a></li>
           <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 rounded-t opacity-50 border-opacity-0 border-b-2 hover:border-opacity-100 hover:border-blue-400"><a href="#" class="h-full">Avi to Mp4</a></li>
-          <li class="p-1 h-full transition-all ease-in-out  font-semibold text-gray-800 rounded-t opacity-50 border-opacity-0 border-b-2 hover:border-opacity-100 hover:border-blue-400"><a href="#" class="h-full">Mp4 to Avi</a></li>
         </ul>
       </div>
     </header>
@@ -39,6 +37,8 @@
         <form
           id="form"
           enctype="multipart/form-data"
+          action="/api/convert"
+          method="post"
           class="flex-col space-y-4 flex items-center"
         >
           <div
@@ -66,39 +66,6 @@
               />
               <p class="text-gray-500 text-sm"></p>
             </div>
-
-            <div id="spinner" class="flex hidden justify-center items-center">
-              <div
-                class="
-                  animate-spin
-                  rounded-full
-                  h-12
-                  w-12
-                  border-b-2 border-gray-900
-                "
-              ></div>
-            </div>
-            <video
-              class="w-full h-full hidden"
-              controls
-              id="video-tag"
-              width="100%"
-              height="100%"
-            >
-              <source id="video-source" src="#" />
-              Your browser does not support the video tag.
-            </video>
-          </div>
-          <div id="spinner" class="flex hidden justify-center items-center">
-            <div
-              class="
-                animate-spin
-                rounded-full
-                h-12
-                w-12
-                border-b-2 border-gray-900
-              "
-            ></div>
           </div>
           <div class="space-y-4 text-center">
             <div class="flex text-sm items-center justify-center text-gray-600">
@@ -121,7 +88,7 @@
                 <span class="">Upload a video</span>
                 <input
                   id="file-upload"
-                  name="file-upload"
+                  name="video"
                   type="file"
                   class="sr-only"
                   accept="video/webm"
@@ -151,10 +118,33 @@
               </div>
             </div>
           </div>
-          <button
+<div class="space-x-6 my-4
+              mx-auto">
+  <button
+          type="reset"
+          class="
+              inline-flex
+              justify-center
+              py-2
+              px-4
+              border border-transparent
+              shadow-md
+              text-sm
+              text-gray-600
+              font-medium
+              rounded-md
+              bg-gray-100
+              hover:bg-gray-300
+              outline-none
+            "
+          id="reset-btn"
+  >
+    Reset
+  </button>
+  <button
 
-            type="submit"
-            class="
+          type="submit"
+          class="
               my-4
               mx-auto
               inline-flex
@@ -162,7 +152,7 @@
               py-2
               px-4
               border border-transparent
-              shadow-sm
+              shadow-md
               text-sm
               font-medium
               rounded-md
@@ -172,15 +162,17 @@
               outline-none
 
             "
-            id="submit-btn"
-          >
-            Upload
-          </button>
+          id="submit-btn"
+  >
+    Upload
+  </button>
+</div>
         </form>
       </div>
     </main>
     <script src="public/js/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
   </body>
 </html>
