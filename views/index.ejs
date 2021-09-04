@@ -171,7 +171,19 @@
       </div>
     </main>
     <script src="public/js/index.js" type="module"></script>
-    <script src="public/js/config.js" type="module"></script>
+    <% if (process.env.NODE_ENV==='development') { %>
+      <script  >
+        window.baseUrl="http://localhost:4000/api";
+
+
+      </script>
+    <% }else {%>
+      <script  >
+
+        window.baseUrl= 'https://online-video-converter-1.herokuapp.com/api';
+      </script>
+    <% }%>
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
